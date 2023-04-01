@@ -12,11 +12,11 @@ func main() {
 	var numPlayers, numDice int
 
 	// Meminta input dari user untuk jumlah pemain dan dadu
-	// fmt.Print("Masukkan jumlah pemain: ")
-	// fmt.Scan(&numPlayers)
+	fmt.Print("Masukkan jumlah pemain: ")
+	fmt.Scan(&numPlayers)
 
-	// fmt.Print("Masukkan jumlah dadu: ")
-	// fmt.Scan(&numDice)
+	fmt.Print("Masukkan jumlah dadu: ")
+	fmt.Scan(&numDice)
 	numPlayers = 3
 	numDice = 4
 	players := make([]*player, numPlayers)
