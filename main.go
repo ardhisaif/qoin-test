@@ -46,6 +46,7 @@ func diceGame(players []*player) {
 
 		round += 1
 	
+		fmt.Println()
 		fmt.Println("===========================")
 		fmt.Printf("Giliran %d lempar dadu \n", round)
 	
@@ -55,19 +56,25 @@ func diceGame(players []*player) {
 	
 		fmt.Println("Setelah evaluasi:")
 		playerAmount := eval(players)
-		fmt.Println(playerAmount)
 		if playerAmount < 2 {
+			maxScore := 0
+			winner := ""
+			for i := 0; i < len(players); i++ {
+				if players[i].isActive == true {
+					fmt.Printf("Game berakhir karena hanya pemain #%d yang memiliki dadu. \n", players[i].number)
+				}
+				if players[i].point > maxScore {
+					maxScore = players[i].point
+					winner = strconv.Itoa(players[i].number)
+				}
+			}
+			fmt.Printf("Game dimenangkan oleh pemain #%s karena memiliki poin lebih banyak dari pemain lainnya.", winner)
 			break
 		}
 
-
-		// for i := 0; i < numPlayer; i++ {
-		// 	fmt.Println(players[i])
-		// }
 	}
-
+	
 }
-
 
 func startGame(players []*player) {
 	for i := 0; i < len(players); i++ {
@@ -79,7 +86,6 @@ func startGame(players []*player) {
 		fmt.Println()
 	}
 }
-
 
 func rollDice(amountDice int, i int, players []*player)  {
 	s1 := rand.NewSource(time.Now().UnixNano())
@@ -101,7 +107,6 @@ func rollDice(amountDice int, i int, players []*player)  {
 }
 
 func switchI(players []*player)  {
-	fmt.Println(players[0], players[1], players[2])
 	for i := 0; i < len(players); i++ {
 		var nextPlayer int
 		if i == 0 {
@@ -123,8 +128,6 @@ func switchI(players []*player)  {
 				break
 			}
 		}
-		fmt.Println(nextPlayer)
-
 
 		for j := players[i].switchDice; j > 0 ; j-- {
 			players[nextPlayer].dice = append(players[nextPlayer].dice, 1)
@@ -133,7 +136,6 @@ func switchI(players []*player)  {
 
 	}
 }
-
 
 func eval(players []*player) int {
 	var playerAmount int
@@ -145,6 +147,7 @@ func eval(players []*player) int {
 
 		if len(players[i].dice) == 0{
 			fmt.Printf("pemain #%d (%d) :", players[i].number, players[i].point)
+			fmt.Println("_ (Berhenti bermain karena tidak memiliki dadu)")
 		}else{
 			fmt.Printf("pemain #%d (%d) :", players[i].number, players[i].point)
 			fmt.Println(arrToString(players[i].dice))
