@@ -8,35 +8,32 @@ import (
 )
 
 func main() {
-
 	var numPlayers, numDice int
 
-	// Meminta input dari user untuk jumlah pemain dan dadu
 	fmt.Print("Masukkan jumlah pemain: ")
 	fmt.Scan(&numPlayers)
 
 	fmt.Print("Masukkan jumlah dadu: ")
 	fmt.Scan(&numDice)
-	numPlayers = 3
-	numDice = 4
+	
 	players := make([]*player, numPlayers)
 	for i := 0; i < numPlayers; i++ {
 		players[i] = &player{
-			number: i + 1,
+			number:   i + 1,
 			isActive: true,
-			dice:   make([]int,numDice),
+			dice:     make([]int, numDice),
 		}
 	}
 	diceGame(players)
 }
 
 type player struct {
-	number int
-	point  int
+	number     int
+	point      int
 	amountDice int
 	switchDice int
-	isActive bool
-	dice   []int
+	isActive   bool
+	dice       []int
 }
 
 var round int
@@ -45,15 +42,15 @@ func diceGame(players []*player) {
 	for {
 
 		round += 1
-	
+
 		fmt.Println()
 		fmt.Println("===========================")
 		fmt.Printf("Giliran %d lempar dadu \n", round)
-	
+
 		startGame(players)
-		
+
 		switchI(players)
-	
+
 		fmt.Println("Setelah evaluasi:")
 		playerAmount := eval(players)
 		if playerAmount < 2 {
@@ -73,7 +70,7 @@ func diceGame(players []*player) {
 		}
 
 	}
-	
+
 }
 
 func startGame(players []*player) {
@@ -81,13 +78,16 @@ func startGame(players []*player) {
 
 		fmt.Printf("pemain #%d (%d) :", players[i].number, players[i].point)
 
+		if len(players[i].dice) == 0 {
+			fmt.Print("_ (Berhenti bermain karena tidak memiliki dadu)")
+		}
 		rollDice(len(players[i].dice), i, players)
 
 		fmt.Println()
 	}
 }
 
-func rollDice(amountDice int, i int, players []*player)  {
+func rollDice(amountDice int, i int, players []*player) {
 	s1 := rand.NewSource(time.Now().UnixNano())
 	r1 := rand.New(s1)
 	var temporaryDice []int
@@ -97,16 +97,16 @@ func rollDice(amountDice int, i int, players []*player)  {
 
 		if num == 1 {
 			players[i].switchDice += 1
-		}else if num == 6 {
+		} else if num == 6 {
 			players[i].point++
-		}else {
+		} else {
 			temporaryDice = append(temporaryDice, num)
 		}
 	}
 	players[i].dice = temporaryDice
 }
 
-func switchI(players []*player)  {
+func switchI(players []*player) {
 	for i := 0; i < len(players); i++ {
 		var nextPlayer int
 		if i == 0 {
@@ -118,18 +118,18 @@ func switchI(players []*player)  {
 		}
 
 		for {
-			if len(players[nextPlayer].dice) == 0 {
-				if nextPlayer == len(players)-1{
+			if !players[nextPlayer].isActive {
+				if nextPlayer == len(players)-1 {
 					nextPlayer = 0
-				}else{
-					nextPlayer ++ 
+				} else {
+					nextPlayer++
 				}
-			}else {
+			} else {
 				break
 			}
 		}
 
-		for j := players[i].switchDice; j > 0 ; j-- {
+		for j := players[i].switchDice; j > 0; j-- {
 			players[nextPlayer].dice = append(players[nextPlayer].dice, 1)
 		}
 		players[i].switchDice = 0
@@ -140,27 +140,27 @@ func switchI(players []*player)  {
 func eval(players []*player) int {
 	var playerAmount int
 	for i := 0; i < len(players); i++ {
-		
-		if len(players[i].dice) == 0{
+
+		if len(players[i].dice) == 0 {
 			players[i].isActive = false
 		}
 
-		if len(players[i].dice) == 0{
+		if len(players[i].dice) == 0 {
 			fmt.Printf("pemain #%d (%d) :", players[i].number, players[i].point)
 			fmt.Println("_ (Berhenti bermain karena tidak memiliki dadu)")
-		}else{
+		} else {
 			fmt.Printf("pemain #%d (%d) :", players[i].number, players[i].point)
 			fmt.Println(arrToString(players[i].dice))
 		}
+
 		if len(players[i].dice) > 0 {
-			playerAmount ++
+			playerAmount++
 		}
 		amount := &players[i].dice
 		players[i].amountDice = len(*amount)
 	}
 	return playerAmount
 }
-
 
 func arrToString(arr []int) string {
 	var result string
