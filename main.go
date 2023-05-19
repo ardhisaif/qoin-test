@@ -24,7 +24,7 @@ func main() {
 			dice:     make([]int, numDice),
 		}
 	}
-	diceGame(players)
+	diceGame(players, 0)
 }
 
 type player struct {
@@ -38,39 +38,36 @@ type player struct {
 
 var round int
 
-func diceGame(players []*player) {
-	for {
+func diceGame(players []*player, round int) {
+	round += 1
 
-		round += 1
+	fmt.Println()
+	fmt.Println("===========================")
+	fmt.Printf("Giliran %d lempar dadu \n", round)
 
-		fmt.Println()
-		fmt.Println("===========================")
-		fmt.Printf("Giliran %d lempar dadu \n", round)
+	startGame(players)
 
-		startGame(players)
+	switchI(players)
 
-		switchI(players)
-
-		fmt.Println("Setelah evaluasi:")
-		playerAmount := eval(players)
-		if playerAmount < 2 {
-			maxScore := 0
-			winner := ""
-			for i := 0; i < len(players); i++ {
-				if players[i].isActive == true {
-					fmt.Printf("Game berakhir karena hanya pemain #%d yang memiliki dadu. \n", players[i].number)
-				}
-				if players[i].point > maxScore {
-					maxScore = players[i].point
-					winner = strconv.Itoa(players[i].number)
-				}
+	fmt.Println("Setelah evaluasi:")
+	playerAmount := eval(players)
+	if playerAmount < 2 {
+		maxScore := 0
+		winner := ""
+		for i := 0; i < len(players); i++ {
+			if players[i].isActive == true {
+				fmt.Printf("Game berakhir karena hanya pemain #%d yang memiliki dadu. \n", players[i].number)
 			}
-			fmt.Printf("Game dimenangkan oleh pemain #%s karena memiliki poin lebih banyak dari pemain lainnya.", winner)
-			break
+			if players[i].point > maxScore {
+				maxScore = players[i].point
+				winner = strconv.Itoa(players[i].number)
+			}
 		}
-
+		fmt.Printf("Game dimenangkan oleh pemain #%s karena memiliki poin lebih banyak dari pemain lainnya.", winner)
+		return
 	}
 
+	diceGame(players, round)
 }
 
 func startGame(players []*player) {
