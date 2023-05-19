@@ -10,10 +10,10 @@ import (
 func main() {
 	var numPlayers, numDice int
 
-	fmt.Print("Masukkan jumlah pemain: ")
+	fmt.Print("tentukanlah jumlah pemain: ")
 	fmt.Scan(&numPlayers)
 
-	fmt.Print("Masukkan jumlah dadu: ")
+	fmt.Print("tentukanlah jumlah dadu: ")
 	fmt.Scan(&numDice)
 	
 	players := make([]*player, numPlayers)
