@@ -10,10 +10,10 @@ import (
 func main() {
 	var numPlayers, numDice int
 
-	fmt.Print("Masukkan jumlah pemain: ")
+	fmt.Print("Tentukan jumlah pemain: ")
 	fmt.Scan(&numPlayers)
 
-	fmt.Print("Masukkan jumlah dadu: ")
+	fmt.Print("Tentukan jumlah dadu: ")
 	fmt.Scan(&numDice)
 	
 	players := make([]*player, numPlayers)
@@ -43,7 +43,7 @@ func diceGame(players []*player, round int) {
 
 	fmt.Println()
 	fmt.Println("===========================")
-	fmt.Printf("Giliran %d lempar dadu \n", round)
+	fmt.Printf("Pemain dengan giliran %d lempar dadu \n", round)
 
 	startGame(players)
 
